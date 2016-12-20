@@ -1,4 +1,6 @@
 (require 'package)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "themes" user-emacs-directory))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
@@ -23,18 +25,20 @@
       inhibit-startup-echo-area-message t)
 (menu-bar-mode 1)
 (tool-bar-mode -1)
-(scroll-bar-mode 0)
+(scroll-bar-mode -1)
 (show-paren-mode 1)
-(linum-mode 1)
+(global-linum-mode)
 ;;(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 ;;(setq-default left-fringe-width nil)
-;;(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 ;;(eval-after-load "vc" '(setq vc-handled-backends nil))
 ;;(setq vc-follow-symlinks t)
 ;;(setq large-file-warning-threshold nil)
 ;;(setq split-width-threshold nil)
 (setq custom-safe-themes t)
 ;;(put 'narrow-to-region 'disabled nil)
+(set-frame-font "Source Code Pro for Powerline-12" nil t)
+
 
 (defconst emacs-tmp-dir (format "%s%s-%s/" temporary-file-directory "emacs" (user-uid)))
 (setq backup-directory-alist
@@ -47,16 +51,6 @@
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
-
-(defun config-esc-quit ()
-    ;;; esc quits
-  (define-key evil-normal-state-map [escape] 'keyboard-quit)
-  (define-key evil-visual-state-map [escape] 'keyboard-quit)
-  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-  (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
 
 
 (use-package evil
@@ -149,12 +143,10 @@
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (add-hook 'flycheck-mode-hook
-	    (lambda ()
-	      (evil-define-key 'normal flycheck-mode-map (kbd "]e") 'flycheck-next-error)
-	      (evil-define-key 'normal flycheck-mode-map (kbd "[e") 'flycheck-previous-error))))
-;;(setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
-
-
+      (lambda ()
+        (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+        (evil-define-key 'normal flycheck-mode-map (kbd "]e") 'flycheck-next-error)
+        (evil-define-key 'normal flycheck-mode-map (kbd "[e") 'flycheck-previous-error))))
 
 (use-package gruvbox-theme)
 (use-package darktooth-theme)
@@ -163,8 +155,26 @@
 (load-theme 'atom-one-dark)
 
 (use-package which-key
+  :diminish ""
   :config
   (which-key-mode t))
+
+(use-package neotree
+  :config
+  (global-set-key [f8] 'neotree-toggle)
+  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
+
+(use-package indent-guide
+  :config
+  (setq indent-guide-recursive t)
+  (indent-guide-global-mode))
+
+(use-package dtrt-indent
+  :config
+  (dtrt-indent-mode 1))
 
 (provide 'init)
 ;;; init.el ends here
