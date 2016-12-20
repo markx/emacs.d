@@ -38,6 +38,7 @@
 (setq custom-safe-themes t)
 ;;(put 'narrow-to-region 'disabled nil)
 (set-frame-font "Source Code Pro for Powerline-12" nil t)
+(setq create-lockfiles nil)
 
 
 (defconst emacs-tmp-dir (format "%s%s-%s/" temporary-file-directory "emacs" (user-uid)))
@@ -105,9 +106,13 @@
 
 (use-package gruvbox-theme)
 (use-package darktooth-theme)
-(use-package monokai-theme)
+;;(use-package monokai-theme)
 (use-package atom-one-dark-theme)
-(load-theme 'atom-one-dark)
+(use-package zenburn-theme)
+;; (load-theme 'atom-one-dark)
+(if (display-graphic-p)
+  (load-theme 'solarized)
+  (load-theme 'zenburn))
 
 (use-package which-key
   :diminish ""
