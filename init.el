@@ -23,7 +23,8 @@
 (setq inhibit-splash-screen t
       inhibit-startup-message t
       inhibit-startup-echo-area-message t)
-(menu-bar-mode 1)
+(unless (display-graphic-p)
+    (menu-bar-mode -1))
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
@@ -39,6 +40,7 @@
 ;;(put 'narrow-to-region 'disabled nil)
 (set-frame-font "Source Code Pro for Powerline-12" nil t)
 (setq create-lockfiles nil)
+(setq backup-by-copying t) ;;stop emacs's backup changing the file's creation date of the original file
 
 
 (defconst emacs-tmp-dir (format "%s%s-%s/" temporary-file-directory "emacs" (user-uid)))

@@ -33,15 +33,15 @@
 
   :config
   (evil-mode 1)
-  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line) 
-  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line) 
+  (define-key evil-motion-state-map (kbd "j") 'evil-next-visual-line) 
+  (define-key evil-motion-state-map (kbd "k") 'evil-previous-visual-line) 
+  (define-key evil-motion-state-map (kbd "C-w q") 'evil-window-delete)
+  (define-key evil-motion-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-motion-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-motion-state-map (kbd "C-k") 'evil-window-up)
+  (define-key evil-motion-state-map (kbd "C-l") 'evil-window-right)
+
   (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile) ;;ctrlp like
-  (define-key evil-normal-state-map (kbd "C-w q") 'evil-window-delete)
-  (define-key evil-visual-state-map (kbd "C-w q") 'evil-window-delete)
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
   (define-key evil-insert-state-map (kbd "s-c") 'clipboard-kill-region)
   (define-key evil-insert-state-map (kbd "s-v") 'evil-paste-from-clipboard)
