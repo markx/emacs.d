@@ -81,16 +81,6 @@
         (evil-define-key 'normal flycheck-mode-map (kbd "]e") 'flycheck-next-error)
         (evil-define-key 'normal flycheck-mode-map (kbd "[e") 'flycheck-previous-error))))
 
-(use-package gruvbox-theme)
-(use-package darktooth-theme)
-;;(use-package monokai-theme)
-(use-package atom-one-dark-theme)
-(use-package zenburn-theme)
-;; (load-theme 'atom-one-dark)
-(if (display-graphic-p)
-  (load-theme 'solarized)
-  (load-theme 'zenburn))
-
 (use-package which-key
   :diminish ""
   :config
@@ -115,6 +105,8 @@
 (use-package dtrt-indent
   :config
   (dtrt-indent-mode 1))
+
+(require 'init-theme)
 
 (provide 'init)
 ;;; init.el ends here
