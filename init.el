@@ -51,45 +51,20 @@
 (setq auto-save-list-file-prefix
       emacs-tmp-dir)
 
+
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
 
 (require 'init-evil)
-
-(use-package helm
-  :diminish helm-mode
-  :commands helm-mode
-  :config
-  (helm-mode 1)
-  (setq helm-autoresize-mode t)
-  (setq helm-mode-fuzzy-match t)
-  (setq helm-completion-in-region-fuzzy-match t))
+(require 'init-helm)
+(require 'init-company)
 
 (use-package projectile
   :defer 1
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t))
-
-(use-package helm-projectile
-  :commands (helm-projectile helm-projectile-switch-project))
-
-(use-package company
-  :defer t
-  :init
-  (global-company-mode)
-  :config
-  (setq company-idle-delay 0.2)
-  (setq company-selection-wrap-around t)
-  (define-key company-active-map [tab] 'company-complete)
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous)
-
-  (use-package company-quickhelp
-    :defer 1
-    :config
-    (company-quickhelp-mode 1)))
 
 (use-package js2-mode
   :mode "\\.js\\'")
@@ -129,7 +104,10 @@
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
 
+(require 'init-go)
+
 (use-package indent-guide
+  :diminish ""
   :config
   (setq indent-guide-recursive t)
   (indent-guide-global-mode))
