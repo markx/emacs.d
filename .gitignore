@@ -1,0 +1,9 @@
+# Ignore all of emacs.d, which is mostly compiled/downloaded scripts.
+/*
+
+# But don't ignore these specific locations.
+!.gitignore
+!lisp/
+!snippets/
+!init.el
+!custom.el
