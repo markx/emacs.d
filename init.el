@@ -22,18 +22,22 @@
 ;; Essential settings.
 (setq inhibit-splash-screen t
       inhibit-startup-message t
-      inhibit-startup-echo-area-message t)
+      inhibit-startup-echo-area-message t
+      initial-scratch-message nil)
 (unless (display-graphic-p)
     (menu-bar-mode -1))
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (show-paren-mode 1)
-(global-linum-mode)
+(add-hook 'prog-mode-hook 'linum-mode)
+(global-hl-line-mode)
+(setq linum-format "%3d ")
+(add-hook 'prog-mode-hook 'electric-pair-mode)
 ;;(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 ;;(setq-default left-fringe-width nil)
 (setq-default indent-tabs-mode nil)
 ;;(eval-after-load "vc" '(setq vc-handled-backends nil))
-;;(setq vc-follow-symlinks t)
+(setq vc-follow-symlinks t)
 ;;(setq large-file-warning-threshold nil)
 ;;(setq split-width-threshold nil)
 (setq custom-safe-themes t)
@@ -59,6 +63,10 @@
 (require 'init-evil)
 (require 'init-helm)
 (require 'init-company)
+(require 'init-go)
+(require 'init-python)
+(require 'init-racket)
+(require 'init-theme)
 
 (use-package projectile
   :defer 1
@@ -88,13 +96,14 @@
 
 (use-package neotree
   :config
-  (global-set-key [f8] 'neotree-toggle)
+  (setq neo-theme 'arrow)
+  (global-set-key [f7] 'neotree-toggle)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "o") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
 
-(require 'init-go)
 
 (use-package indent-guide
   :diminish ""
@@ -106,7 +115,7 @@
   :config
   (dtrt-indent-mode 1))
 
-(require 'init-theme)
+(use-package ag)
 
 (provide 'init)
 ;;; init.el ends here

@@ -10,7 +10,7 @@
   (load-theme 'zenburn))
 
 (defun switch-theme (theme)
-  ;; This interactive call is taken from `load-theme'
+  "Disable any loaded themes before enabling a new theme."
   (interactive
    (list
     (intern (completing-read "Load custom theme: "
@@ -18,5 +18,14 @@
                                      (custom-available-themes))))))
   (mapcar #'disable-theme custom-enabled-themes)
   (load-theme theme t))
+
+(setq my-partial-theme-list '(smart-mode-line-dark
+                              smart-mode-line-light
+                              smart-mode-line-respectful
+                              ))
+
+(defadvice load-theme (before dont-propagate-theme (theme &rest args) activate)
+  (unless (memq theme my-partial-theme-list)
+    (mapc #'disable-theme custom-enabled-themes)))
 
 (provide 'init-theme)

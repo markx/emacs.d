@@ -14,7 +14,7 @@
   (setq evil-want-C-u-scroll t)
   (setq select-enable-clipboard nil)
 
-  (setq evil-emacs-state-modes nil)
+  ;;(setq evil-emacs-state-modes nil)
   ;;(setq evil-motion-state-modes nil)
 
 
