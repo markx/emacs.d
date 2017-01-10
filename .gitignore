@@ -4,6 +4,7 @@
 # But don't ignore these specific locations.
 !.gitignore
 !lisp/
+!config/
 !snippets/
 !init.el
 !custom.el

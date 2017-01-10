@@ -1,5 +1,5 @@
 (require 'package)
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "themes" user-emacs-directory))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
