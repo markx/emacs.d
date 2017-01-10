@@ -5,4 +5,8 @@
   (define-key racket-repl-mode-map (kbd "C-n") 'comint-next-matching-input-from-input)
   )
 
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'racket-mode-hook 'rainbow-delimiters-mode))
+
 (provide 'init-racket)
