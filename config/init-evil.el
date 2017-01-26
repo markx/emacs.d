@@ -1,12 +1,13 @@
 
-(defun evil-paste-from-clipboard ()
+(defun my/paste-from-clipboard ()
   (interactive)
-  (evil-paste-from-register ?+))
+  ;(evil-paste-from-register ?+))
+  (clipboard-yank))
 
-(defun evil-copy-to-clipboard ()
+(defun my/copy-to-clipboard ()
   (interactive)
-  (evil-use-register ?+)
-  (evil-yank))
+  (clipboard-kill-region))
+
 
 (use-package evil
   :diminish undo-tree-mode 
@@ -25,7 +26,7 @@
     (evil-leader/set-key "<SPC>" 'helm-M-x)
     (evil-leader/set-key "r" 'helm-imenu)
     (evil-leader/set-key "b" 'helm-mini);; change to another buffer
-    (evil-leader/set-key "pp" 'helm-projectile)
+    (evil-leader/set-key "pp" 'helm-projectile-switch-project)
     (evil-leader/set-key "pr" 'projectile-switch-project)
     (evil-leader/set-key "1" 'delete-other-windows)
     (evil-leader/set-key "f" 'helm-find-files)
@@ -44,12 +45,30 @@
   (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile) ;;ctrlp like
 
   (define-key evil-insert-state-map (kbd "s-c") 'clipboard-kill-region)
-  (define-key evil-insert-state-map (kbd "s-v") 'evil-paste-from-clipboard)
+  (define-key evil-insert-state-map (kbd "s-v") 'clipboard-yank)
 
   (define-key evil-visual-state-map (kbd "SPC c SPC") 'comment-dwim)
 
+  ;(define-key evil-insert-state-map (kbd "C-k") 'paredit-kill)
+  (define-key evil-insert-state-map (kbd "C-y") 'yank)
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (evil-define-key 'insert' company-active-map (kbd "C-p") 'company-select-previous-or-abort)
+  (evil-define-key 'insert' company-active-map (kbd "C-n") 'company-select-next-or-abort)
+  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+
+
+  (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
+  (define-key evil-ex-completion-map (kbd "C-w") 'evil-delete-backward-word)
+
   (eval-after-load 'evil-ex
-    '(evil-ex-define-cmd "h[elp]" 'help)))
+    '(evil-ex-define-cmd "h[elp]" 'help))
+
+  (eval-after-load 'helm
+    '(progn
+      (define-key helm-map (kbd "C-w")  'evil-delete-backward-word)
+      (define-key helm-map (kbd "s-v") 'my/paste-from-clipboard))))
 
 
 
