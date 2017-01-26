@@ -31,7 +31,7 @@
 (show-paren-mode 1)
 (add-hook 'prog-mode-hook 'linum-mode)
 (global-hl-line-mode)
-(setq linum-format "%3d ")
+(setq linum-format "%4d  ")
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 ;;(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 ;;(setq-default left-fringe-width nil)
@@ -83,11 +83,25 @@
 (use-package flycheck
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
+
+  ;; use local eslint from node_modules before global
+  ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
+  (defun my/use-eslint-from-node-modules ()
+   (let* ((root (locate-dominating-file
+                 (or (buffer-file-name) default-directory)
+                 "node_modules"))
+          (eslint (and root
+                       (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                         root))))
+     (when (and eslint (file-executable-p eslint))
+       (setq-local flycheck-javascript-eslint-executable eslint))))
+  (add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
+
   (add-hook 'flycheck-mode-hook
-      (lambda ()
-        (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
-        (evil-define-key 'normal flycheck-mode-map (kbd "]e") 'flycheck-next-error)
-        (evil-define-key 'normal flycheck-mode-map (kbd "[e") 'flycheck-previous-error))))
+    (lambda ()
+      (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+      (evil-define-key 'normal flycheck-mode-map (kbd "]e") 'flycheck-next-error)
+      (evil-define-key 'normal flycheck-mode-map (kbd "[e") 'flycheck-previous-error))))
 
 (use-package which-key
   :diminish ""
