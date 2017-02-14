@@ -9,7 +9,8 @@
 
 ;; Don't litter my init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file 'noerror)
+;; Don't load it, so it's disabled
+;;(load custom-file 'noerror)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -75,7 +76,10 @@
   (setq projectile-enable-caching t))
 
 (use-package js2-mode
-  :mode "\\.js\\'")
+  :mode "\\.js\\'"
+  :config
+  (setq js2-mode-show-strict-warnings nil)
+  (setq js2-mode-show-parse-errors nil))
 
 (use-package magit
   :defer t)
@@ -156,6 +160,10 @@
 (use-package smart-mode-line
   :config
   (smart-mode-line-enable))
+
+(use-package simpleclip
+  :config
+  (simpleclip-mode 1))
 
 (provide 'init)
 ;;; init.el ends here
