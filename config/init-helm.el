@@ -11,7 +11,10 @@
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
   (define-key helm-map (kbd "C-z")  'helm-select-action)) ; list actions using C-z
 
+
 (use-package helm-projectile
   :commands (helm-projectile helm-projectile-switch-project))
+
+(use-package helm-ag)
 
 (provide 'init-helm)

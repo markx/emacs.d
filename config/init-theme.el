@@ -1,15 +1,16 @@
 
-(use-package gruvbox-theme)
-(use-package darktooth-theme)
+;; (use-package gruvbox-theme)
 ;;(use-package monokai-theme)
+
 (use-package atom-one-dark-theme)
-(use-package zenburn-theme)
+;; (use-package zenburn-theme)
 
 (if (display-graphic-p)
-  (load-theme 'atom-one-dark)
-  (load-theme 'zenburn))
+    (load-theme 'atom-one-dark)
+  (load-theme 'atom-one-dark))
 
 (defun switch-theme (theme)
+
   "Disable any loaded themes before enabling a new theme."
   (interactive
    (list
@@ -21,8 +22,8 @@
 
 (setq my-partial-theme-list '(smart-mode-line-dark
                               smart-mode-line-light
-                              smart-mode-line-respectful
-                              ))
+                              smart-mode-line-respectful))
+                              
 
 (defadvice load-theme (before dont-propagate-theme (theme &rest args) activate)
   (unless (memq theme my-partial-theme-list)

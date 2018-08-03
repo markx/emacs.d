@@ -3,7 +3,6 @@
 (add-to-list 'custom-theme-load-path (expand-file-name "themes" user-emacs-directory))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 (package-initialize)
 
@@ -26,9 +25,9 @@
       inhibit-startup-echo-area-message t
       initial-scratch-message nil)
 (unless (display-graphic-p)
-    (menu-bar-mode -1))
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+    (menu-bar-mode 0))
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
 (show-paren-mode 1)
 (add-hook 'prog-mode-hook 'linum-mode)
 (global-hl-line-mode)
@@ -46,6 +45,7 @@
 (set-frame-font "Source Code Pro for Powerline-12" nil t)
 (setq create-lockfiles nil)
 (setq backup-by-copying t) ;;stop emacs's backup changing the file's creation date of the original file
+(setq ring-bell-function 'ignore)
 
 
 (defconst emacs-tmp-dir (format "%s%s-%s/" temporary-file-directory "emacs" (user-uid)))
@@ -61,25 +61,11 @@
   :config
   (exec-path-from-shell-initialize))
 
-(require 'init-evil)
-(require 'init-helm)
-(require 'init-company)
-(require 'init-go)
-(require 'init-python)
-(require 'init-racket)
-(require 'init-theme)
-
 (use-package projectile
   :defer 1
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t))
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :config
-  (setq js2-mode-show-strict-warnings nil)
-  (setq js2-mode-show-parse-errors nil))
 
 (use-package magit
   :defer t)
@@ -115,12 +101,7 @@
 (use-package neotree
   :config
   (setq neo-theme 'arrow)
-  (global-set-key [f7] 'neotree-toggle)
-  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
-  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "o") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-enter)
-  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
+  (global-set-key [f7] 'neotree-toggle))
 
 
 (use-package indent-guide
@@ -135,35 +116,37 @@
 
 (use-package ag)
 
-(use-package parinfer
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-            pretty-parens  ; different paren styles for different modes.
-            evil           ; If you use Evil.
-            ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-            ;; paredit        ; Introduce some paredit commands.
-            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-            smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)
-    (add-hook 'racket-mode-hook #'parinfer-mode)))
-
-(use-package rainbow-delimiters)
-
 (use-package smart-mode-line
   :config
+  (setq sml/theme 'dark)
   (smart-mode-line-enable))
 
 (use-package simpleclip
   :config
   (simpleclip-mode 1))
+
+(use-package lsp-mode
+  :ensure t
+  :defer t
+  :hook (python-mode js-mode js2-mode rjsx-mode go-mode)
+  )
+
+(use-package lsp-ui
+  :ensure t
+  :requires (lsp-mode flycheck)
+  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+
+(require 'init-evil)
+(require 'init-helm)
+(require 'init-company)
+(require 'init-go)
+(require 'init-python)
+(require 'init-lisp)
+(require 'init-js)
+(require 'init-theme)
+
+
 
 (provide 'init)
 ;;; init.el ends here

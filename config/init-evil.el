@@ -1,23 +1,43 @@
+(require 'simpleclip)
+(require 'helm)
 
-(defun my/paste-from-clipboard ()
-  (interactive)
-  ;(evil-paste-from-register ?+))
-  (clipboard-yank))
-
-(defun my/copy-to-clipboard ()
-  (interactive)
-  (clipboard-kill-region))
+(defun my/evil-config ()
 
 
-(use-package evil
-  :diminish undo-tree-mode 
-  :init
-  (setq evil-want-C-u-scroll t)
-  (setq select-enable-clipboard nil)
+  (define-key evil-motion-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-motion-state-map (kbd "k") 'evil-previous-visual-line)
+  (define-key evil-motion-state-map (kbd "C-w q") 'evil-window-delete)
+  (define-key evil-motion-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-motion-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-motion-state-map (kbd "C-k") 'evil-window-up)
+  (define-key evil-motion-state-map (kbd "C-l") 'evil-window-right)
 
-  ;;(setq evil-emacs-state-modes nil)
-  ;;(setq evil-motion-state-modes nil)
+  (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile) ;;ctrlp like
 
+  (define-key evil-insert-state-map (kbd "s-c") 'simpleclip-copy)
+  (define-key evil-insert-state-map (kbd "s-v") 'simpleclip-paste)
+
+  (define-key evil-visual-state-map (kbd "SPC c SPC") 'comment-dwim)
+
+  (define-key evil-insert-state-map (kbd "C-y") 'yank)
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (define-key evil-insert-state-map (kbd "C-/") 'company-complete)
+  (evil-define-key 'insert' company-active-map (kbd "C-p") 'company-select-previous-or-abort)
+  (evil-define-key 'insert' company-active-map (kbd "C-n") 'company-select-next-or-abort)
+  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
+
+  (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
+  (define-key evil-ex-completion-map (kbd "C-w") 'evil-delete-backward-word)
+
+  (eval-after-load 'evil-ex
+    '(evil-ex-define-cmd "h[elp]" 'help))
+
+  (eval-after-load 'helm
+    '(progn
+      (define-key helm-map (kbd "C-w")  'evil-delete-backward-word)
+      (define-key helm-map (kbd "s-v") 'simpleclip-paste)))
 
   (use-package evil-leader
     :config
@@ -30,46 +50,26 @@
     (evil-leader/set-key "pr" 'projectile-switch-project)
     (evil-leader/set-key "1" 'delete-other-windows)
     (evil-leader/set-key "f" 'helm-find-files)
-    (evil-leader/set-key "c SPC" 'comment-line))
+    (evil-leader/set-key "c SPC" 'comment-line)))
 
+
+(use-package evil
+  :init
+  (setq evil-want-integration nil)
+  (setq evil-want-C-u-scroll t)
+  (setq select-enable-clipboard nil)
+  ;;(setq evil-emacs-state-modes nil)
+  ;;(setq evil-motion-state-modes nil)
   :config
-  (evil-mode 1)
-  (define-key evil-motion-state-map (kbd "j") 'evil-next-visual-line) 
-  (define-key evil-motion-state-map (kbd "k") 'evil-previous-visual-line) 
-  (define-key evil-motion-state-map (kbd "C-w q") 'evil-window-delete)
-  (define-key evil-motion-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-motion-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-motion-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-motion-state-map (kbd "C-l") 'evil-window-right)
+  (evil-set-initial-state 'repl-mode 'emacs)
+  (my/evil-config)
+  (evil-mode 1))
 
-  (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile) ;;ctrlp like
-
-  (define-key evil-insert-state-map (kbd "s-c") 'clipboard-kill-region)
-  (define-key evil-insert-state-map (kbd "s-v") 'clipboard-yank)
-
-  (define-key evil-visual-state-map (kbd "SPC c SPC") 'comment-dwim)
-
-  ;(define-key evil-insert-state-map (kbd "C-k") 'paredit-kill)
-  (define-key evil-insert-state-map (kbd "C-y") 'yank)
-  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-  (evil-define-key 'insert' company-active-map (kbd "C-p") 'company-select-previous-or-abort)
-  (evil-define-key 'insert' company-active-map (kbd "C-n") 'company-select-next-or-abort)
-  (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
-
-
-  (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
-  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
-  (define-key evil-ex-completion-map (kbd "C-w") 'evil-delete-backward-word)
-
-  (eval-after-load 'evil-ex
-    '(evil-ex-define-cmd "h[elp]" 'help))
-
-  (eval-after-load 'helm
-    '(progn
-      (define-key helm-map (kbd "C-w")  'evil-delete-backward-word)
-      (define-key helm-map (kbd "s-v") 'my/paste-from-clipboard))))
-
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 
 (use-package evil-surround
@@ -80,9 +80,9 @@
   :diminish evil-escape-mode
   :config
   (setq-default evil-escape-key-sequence "jk")
+  (setq evil-escape-unordered-key-sequence t)
   (global-set-key [escape] 'evil-escape)
   (evil-escape-mode))
 
 
 (provide 'init-evil)
-
